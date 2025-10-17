@@ -1,0 +1,69 @@
+@import "open-props/style";
+@import "open-props/normalize";
+@import "open-props/theme.light.switch.min.css";
+@import "open-props/theme.dark.switch.min.css";
+
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --primary: var(--purple-8);
+  --muted: var(--gray-6);
+}
+
+html {
+  --s: 5rem; /* control the size*/
+  --c1: var(--surface-3);
+  --c2: var(--surface-1);
+  --c3: var(--surface-2);
+
+  --_g: var(--c3) 0 120deg, #0000 0;
+  background:
+    conic-gradient(from -60deg at 50% calc(100% / 3), var(--_g)),
+    conic-gradient(from 120deg at 50% calc(200% / 3), var(--_g)),
+    conic-gradient(from 60deg at calc(200% / 3), var(--c3) 60deg, var(--c2) 0 120deg, #0000 0),
+    conic-gradient(from 180deg at calc(100% / 3), var(--c1) 60deg, var(--_g)),
+    linear-gradient(90deg, var(--c1) calc(100% / 6), var(--c2) 0 50%, var(--c1) 0 calc(500% / 6), var(--c2) 0);
+  background-size: calc(1.732 * var(--s)) var(--s);
+}
+
+body {
+  margin: 0;
+}
+
+header,
+main {
+  box-sizing: content-box;
+  max-width: 1024px;
+  margin-inline: auto;
+  display: block flow-root;
+  background-color: rgb(from var(--surface-1) r g b / 0.7);
+}
+
+header {
+  margin-bottom: 1rem;
+  border-bottom-left-radius: var(--size-2);
+  border-bottom-right-radius: var(--size-2);
+}
+
+main {
+  border-radius: var(--size-2);
+}
+
+article {
+  display: block flow-root;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+h2 {
+  margin-bottom: 0.25em;
+  font-size: var(--font-size-5);
+  font-weight: var(--font-weight-7);
+}
+h3 {
+  margin-bottom: 0.25em;
+  font-size: var(--font-size-4);
+  font-weight: var(--font-weight-7);
+}
