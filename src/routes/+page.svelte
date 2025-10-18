@@ -22,6 +22,7 @@
     align-self: center;
     display: grid;
     gap: 1rem;
+    padding-inline: var(--size-2);
   }
 
   .hero-image {
@@ -32,9 +33,11 @@
     color: var(--gray-1);
     font-size: var(--size-4);
     mask: conic-gradient(from 45deg at left, #0000, #000 1deg 89deg, #0000 90deg) 50%/100% 2rem;
+    border-top-right-radius: var(--size-1);
+    border-bottom-right-radius: var(--size-1);
   }
 
-  @media (width < 992px) {
+  @media (width < 480px) {
     .hero {
       grid-template-columns: auto;
     }
