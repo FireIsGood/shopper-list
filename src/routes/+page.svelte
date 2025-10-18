@@ -1,3 +1,7 @@
+<svelte:head>
+  <title>Shopper List</title>
+</svelte:head>
+
 <article class="hero">
   <section class="hero-text">
     <h1>Shopper List</h1>
