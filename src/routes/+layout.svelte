@@ -1,6 +1,5 @@
 <script lang="ts">
   import "../app.css";
-  import favicon from "$lib/assets/favicon.svg";
   import LightDarkSwitcher from "./light-dark-switcher.svelte";
   import { page } from "$app/state";
 
@@ -8,7 +7,7 @@
 </script>
 
 <svelte:head>
-  <link rel="icon" href={favicon} />
+  <link rel="icon" href="https://fav.farm/🛍️" />
 </svelte:head>
 
 <header>
