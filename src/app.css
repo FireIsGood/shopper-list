@@ -33,25 +33,6 @@ body {
   margin: 0;
 }
 
-header,
-main {
-  box-sizing: content-box;
-  max-width: 1024px;
-  margin-inline: auto;
-  display: block flow-root;
-  background-color: rgb(from var(--surface-1) r g b / 0.7);
-}
-
-header {
-  margin-bottom: 1rem;
-  border-bottom-left-radius: var(--size-2);
-  border-bottom-right-radius: var(--size-2);
-}
-
-main {
-  border-radius: var(--size-2);
-}
-
 article {
   display: block flow-root;
   padding: 1rem;

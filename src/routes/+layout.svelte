@@ -13,8 +13,8 @@
 <header>
   <nav>
     <a href="/" class:active={page.url.pathname === "/"}>Home</a>
-    <a href="/app" class:active={<string>page.url.pathname === "/app"}>App</a>
-    <a href="/about" class:active={<string>page.url.pathname === "/about"}>About</a>
+    <a href="/app" class:active={(<string>page.url.pathname).startsWith("/app")}>App</a>
+    <a href="/about" class:active={(<string>page.url.pathname).startsWith("/about")}>About</a>
     <LightDarkSwitcher />
   </nav>
 </header>
@@ -23,6 +23,25 @@
 </main>
 
 <style>
+  header,
+  main {
+    box-sizing: content-box;
+    max-width: 1024px;
+    margin-inline: auto;
+    display: block flow-root;
+    background-color: rgb(from var(--surface-1) r g b / 0.7);
+  }
+
+  header {
+    margin-bottom: 1rem;
+    border-bottom-left-radius: var(--size-2);
+    border-bottom-right-radius: var(--size-2);
+  }
+
+  main {
+    border-radius: var(--size-2);
+  }
+
   nav {
     padding: 1rem;
     display: flex;
