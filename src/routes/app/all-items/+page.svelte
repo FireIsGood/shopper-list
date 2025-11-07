@@ -4,6 +4,9 @@
   import { getAppState } from "$lib/state.svelte";
 
   const app = getAppState();
+
+  // Fucked Up and Evil hack
+  const allItems = $derived(app.shoppingItems.map((i) => i));
 </script>
 
 <svelte:head>
@@ -12,5 +15,5 @@
 
 <AppNav activePage="all-items"></AppNav>
 <article>
-  <StoreItems items={app.shoppingItems} mode="card" />
+  <StoreItems items={allItems} mode="card" />
 </article>

@@ -110,6 +110,10 @@ ul {
   & > li::marker {
     content: "\25CF  ";
   }
+
+  & > li:not(:last-child) {
+    margin-bottom: var(--size-1);
+  }
 }
 
 li {

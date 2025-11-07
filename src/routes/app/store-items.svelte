@@ -8,7 +8,7 @@
 
   const { items, mode = "card" }: { items: ShoppingItem[]; mode?: StoreItemMode } = $props();
 
-  const itemsSorted = $derived(items.sort((a, b) => b.name.localeCompare(a.name)));
+  const itemsSorted = $derived(items.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase())));
 
   function editItem(item: ShoppingItem) {}
 
@@ -25,7 +25,7 @@
   <p class="muted-text">No Items...</p>
 {:else if mode === "list"}
   <ul>
-    {#each items as item}
+    {#each itemsSorted as item}
       <li>
         <div class="list-item">
           <div>
@@ -33,6 +33,11 @@
             {#if item.description}
               <span class="muted-text">&ndash; {item.description}</span>
             {/if}
+          </div>
+          <div class="list-item-stores store-preview-list">
+            {#each item.stores as store}
+              <span class="store-preview">{store}</span>
+            {/each}
           </div>
           <div class="list-item-options">
             <button class="list-edit-item-button light-button" onclick={() => editItem(item)}
@@ -48,7 +53,7 @@
   </ul>
 {:else if mode === "card"}
   <div class="card-item-list">
-    {#each items as item}
+    {#each itemsSorted as item}
       <div class="card-item" class:to-buy={item.needToBuy}>
         <p class="card-item-text">
           <span class="card-item-name">{item.name}</span>
@@ -83,11 +88,15 @@
 <style>
   .list-item {
     display: flex;
+    gap: var(--size-2);
+  }
+
+  .list-item-stores {
+    margin-left: auto;
   }
 
   .list-item-options {
     display: flex;
-    margin-left: auto;
     gap: var(--size-1);
     flex-shrink: 0;
   }
@@ -131,6 +140,7 @@
 
     background-color: var(--surface-1);
     border: 1px solid var(--surface-2);
+    border-radius: var(--size-1);
   }
 
   .card-item::after {
@@ -176,6 +186,7 @@
     display: inline-block;
     background-color: var(--primary);
     padding-inline: var(--size-2);
+    border-radius: var(--size-1);
   }
 
   .card-item-options {
