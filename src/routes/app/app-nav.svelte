@@ -22,19 +22,22 @@
     gap: var(--size-3);
   }
   a {
+    height: var(--size-8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
     flex-grow: 1;
+
     font-weight: var(--font-weight-6);
-    padding: var(--size-2) var(--size-3);
+    border-radius: var(--size-1);
     background-color: var(--surface-1);
     border: 1px solid var(--surface-2);
-    border-radius: var(--size-2);
-    text-align: center;
     color: var(--text-2);
     text-decoration-color: var(--muted);
 
     &.active-page {
       background-color: var(--surface-2);
-      border: 1px solid var(--surface-1);
+      border: 1px solid var(--surface-3);
     }
   }
 </style>

@@ -37,6 +37,7 @@
     margin-inline: auto;
     display: block flow-root;
     background-color: rgb(from var(--surface-1) r g b / 0.7);
+    box-shadow: var(--shadow-3);
   }
 
   header {

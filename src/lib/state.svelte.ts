@@ -4,11 +4,10 @@ import { getContext, setContext } from "svelte";
 const APP_CTX = "APP_CTX";
 
 type AppData = {
-  coolvalue: string;
   shoppingItems: ShoppingItem[];
 };
 
-type ShoppingItem = {
+export type ShoppingItem = {
   name: string;
   description: string;
   stores: string[];
@@ -16,7 +15,6 @@ type ShoppingItem = {
 };
 
 const defaultData: AppData = {
-  coolvalue: "Default value",
   shoppingItems: [],
 };
 
