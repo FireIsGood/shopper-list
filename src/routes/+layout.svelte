@@ -2,6 +2,13 @@
   import "../app.css";
   import LightDarkSwitcher from "./light-dark-switcher.svelte";
   import { page } from "$app/state";
+  import { setAppState } from "$lib/state.svelte";
+
+  const app = setAppState();
+
+  $effect(() => {
+    localStorage.setItem("appState", JSON.stringify(app));
+  });
 
   let { children } = $props();
 </script>
