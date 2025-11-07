@@ -10,6 +10,8 @@
 :root {
   --primary: light-dark(var(--purple-2), var(--purple-10));
   --muted: var(--gray-6);
+  --blue-container: light-dark(var(--blue-4), var(--blue-8));
+  --red-container: light-dark(var(--red-4), var(--red-8));
 }
 
 html {

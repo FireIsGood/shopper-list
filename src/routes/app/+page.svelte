@@ -2,17 +2,22 @@
   import { getAppState } from "$lib/state.svelte";
   import AppNav from "./app-nav.svelte";
   import AddItemDialog from "./add-item-dialog.svelte";
-  import StoreItem from "./store-item.svelte";
+  import StoreItems from "./store-items.svelte";
 
   const app = getAppState();
 
   const needToBuyItems = $derived(app.shoppingItems.filter((i) => i.needToBuy));
-  const needToBuyStores = $derived([
-    ...needToBuyItems.reduce((map, item) => {
-      item.stores.forEach((store) => map.set(store, 1));
-      return map;
-    }, new Map<string, number>()),
-  ]);
+  const needToBuyStores = $derived(
+    [
+      ...needToBuyItems.reduce((map, item) => {
+        item.stores.forEach((store) => {
+          const prior = map.get(store) ?? 0;
+          map.set(store, prior + 1);
+        });
+        return map;
+      }, new Map<string, number>()),
+    ].sort(([_a, a], [_b, b]) => b - a)
+  );
 </script>
 
 <svelte:head>
@@ -24,15 +29,7 @@
   <section class="dashboard-groups">
     <div class="shopping-item-group">
       <h2 class="group-header">To Buy</h2>
-      {#if needToBuyItems.length === 0}
-        <p class="muted-text">No Items...</p>
-      {:else}
-        <ul>
-          {#each needToBuyItems as item}
-            <StoreItem {item} mode="list" />
-          {/each}
-        </ul>
-      {/if}
+      <StoreItems items={needToBuyItems} mode="list" />
     </div>
     <div class="stores-group">
       <h2 class="group-header">Stores</h2>

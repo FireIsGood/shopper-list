@@ -1,6 +1,6 @@
 <script lang="ts">
   import AppNav from "./../app-nav.svelte";
-  import StoreItem from "../store-item.svelte";
+  import StoreItems from "../store-items.svelte";
   import { getAppState } from "$lib/state.svelte";
 
   const app = getAppState();
@@ -14,11 +14,5 @@
 
 <AppNav activePage="to-buy"></AppNav>
 <article>
-  {#if needToBuyItems.length === 0}
-    <p class="muted-text">No Items...</p>
-  {:else}
-    {#each needToBuyItems as item}
-      <StoreItem {item} mode="card" />
-    {/each}
-  {/if}
+  <StoreItems items={needToBuyItems} mode="card" />
 </article>

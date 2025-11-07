@@ -194,6 +194,7 @@
     display: flex;
     gap: var(--size-2);
   }
+
   .store-preview {
     display: inline-block;
     background-color: var(--primary);
