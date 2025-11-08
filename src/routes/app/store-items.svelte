@@ -4,9 +4,7 @@
   import IconPencilSimpleBold from "phosphor-icons-svelte/IconPencilSimpleBold.svelte";
   import IconCheckBold from "phosphor-icons-svelte/IconCheckBold.svelte";
   import IconTargetBold from "phosphor-icons-svelte/IconTargetBold.svelte";
-  import IconDotsThreeCircleBold from "phosphor-icons-svelte/IconDotsThreeCircleBold.svelte";
   import type { ShoppingItem } from "$lib/state.svelte";
-  import { Tooltip } from "bits-ui";
 
   type StoreItemMode = "card" | "list";
 
@@ -36,30 +34,15 @@
     {#each itemsSorted as item}
       <li>
         <div class="list-item">
-          <div>
-            {item.name}
+          <div class="list-item-text">
+            <span class="list-item-name">{item.name}</span>
             {#if item.description}
               <span class="muted-text">&ndash; {item.description}</span>
             {/if}
           </div>
           <div class="list-item-stores">
             {#if item.stores.length > 0}
-              {#if item.stores.length > 1}
-                <Tooltip.Provider>
-                  <Tooltip.Root delayDuration={0}>
-                    <Tooltip.Trigger class="light-button store-more-icon">
-                      <IconDotsThreeCircleBold />
-                    </Tooltip.Trigger>
-                    <Tooltip.Portal>
-                      <Tooltip.Content class="list-item-stores-full">
-                        <Tooltip.Arrow />
-                        <StoreNameChips stores={item.stores} />
-                      </Tooltip.Content>
-                    </Tooltip.Portal>
-                  </Tooltip.Root>
-                </Tooltip.Provider>
-              {/if}
-              <StoreNameChips stores={item.stores[0]} />
+              <StoreNameChips stores={item.stores} limit={1} />
             {/if}
           </div>
           <div class="list-item-options">
@@ -111,31 +94,32 @@
 <AddItemDialog bind:this={addItemDialog} />
 
 <style>
+  li {
+    max-inline-size: unset;
+  }
+
   .list-item {
     display: grid;
     grid-template-columns: 1fr auto auto;
     gap: var(--size-2);
   }
 
+  .list-item-text {
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: var(--muted); /* hack to fix ellipsis color */
+  }
+
+  .list-item-name {
+    color: var(--text-1);
+  }
+
   .list-item-stores {
     display: flex;
     gap: var(--size-1);
     align-items: center;
-  }
-  :global(.store-more-icon) {
-    color: var(--muted);
-    padding: var(--size-1);
-  }
-  :global(.list-item-stores-full) {
-    display: flex;
-    background-color: var(--surface-1);
-    padding: var(--size-1);
-    border: 1px solid var(--surface-3);
-    border-radius: var(--size-1);
-    box-shadow: var(--shadow-2);
-  }
-  :global([data-arrow]) {
-    color: var(--surface-3);
   }
 
   .list-item-options {
@@ -195,6 +179,7 @@
     clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%);
     z-index: 0;
     background-color: rgb(from var(--red-container) r g b / 0.3);
+    transition: background-color 200ms var(--ease-out-5);
   }
   .card-item.to-buy::after {
     background-color: rgb(from var(--blue-container) r g b / 0.3);

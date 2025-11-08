@@ -58,10 +58,14 @@
 </article>
 
 <style>
+  h2 {
+    max-inline-size: unset;
+  }
+
   .dashboard-groups {
     min-height: 50vh;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 2fr 1fr;
     gap: var(--size-3);
   }
 
