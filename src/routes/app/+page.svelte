@@ -3,6 +3,7 @@
   import AppNav from "./app-nav.svelte";
   import AddItemDialog from "./add-item-dialog.svelte";
   import StoreItems from "./store-items.svelte";
+  import StoreNameChips from "./store-name-chips.svelte";
 
   const app = getAppState();
 
@@ -41,7 +42,7 @@
       {:else}
         <ul>
           {#each needToBuyStores as store}
-            <li>{store[0]} &ndash; {store[1]}</li>
+            <li><StoreNameChips stores={store[0]} /> &ndash; {store[1]}</li>
           {/each}
         </ul>
       {/if}

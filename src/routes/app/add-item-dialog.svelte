@@ -1,6 +1,7 @@
 <script lang="ts">
   import { getAppState, type ShoppingItem } from "$lib/state.svelte";
   import { Dialog } from "bits-ui";
+  import StoreNameChips from "./store-name-chips.svelte";
   import IconXBold from "phosphor-icons-svelte/IconXBold.svelte";
 
   type DialogMode = "add" | "edit";
@@ -146,11 +147,9 @@
           <label for="stores">Stores</label>
           <input id="stores" placeholder="Amazon, Ebay, 7-Eleven" bind:value={stores} />
         </div>
-        <div class="store-preview-list">
-          {#each storesList as store}
-            <span class="store-preview">{store}</span>
-          {/each}
-        </div>
+        <StoreNameChips stores={storesList}
+          >{#snippet fallback()}<em class="muted-text">No stores added</em>{/snippet}</StoreNameChips
+        >
       </section>
       <div class="dialog-actions">
         {#if mode === "edit"}

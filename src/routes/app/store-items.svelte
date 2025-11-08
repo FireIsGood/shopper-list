@@ -1,9 +1,12 @@
 <script lang="ts">
   import AddItemDialog from "./add-item-dialog.svelte";
+  import StoreNameChips from "./store-name-chips.svelte";
   import IconPencilSimpleBold from "phosphor-icons-svelte/IconPencilSimpleBold.svelte";
   import IconCheckBold from "phosphor-icons-svelte/IconCheckBold.svelte";
   import IconTargetBold from "phosphor-icons-svelte/IconTargetBold.svelte";
+  import IconDotsThreeCircleBold from "phosphor-icons-svelte/IconDotsThreeCircleBold.svelte";
   import type { ShoppingItem } from "$lib/state.svelte";
+  import { Tooltip } from "bits-ui";
 
   type StoreItemMode = "card" | "list";
 
@@ -39,10 +42,25 @@
               <span class="muted-text">&ndash; {item.description}</span>
             {/if}
           </div>
-          <div class="list-item-stores store-preview-list">
-            {#each item.stores.slice(0, 1) as store}
-              <span class="store-preview">{store}</span>
-            {/each}
+          <div class="list-item-stores">
+            {#if item.stores.length > 0}
+              {#if item.stores.length > 1}
+                <Tooltip.Provider>
+                  <Tooltip.Root delayDuration={0}>
+                    <Tooltip.Trigger class="light-button store-more-icon">
+                      <IconDotsThreeCircleBold />
+                    </Tooltip.Trigger>
+                    <Tooltip.Portal>
+                      <Tooltip.Content class="list-item-stores-full">
+                        <Tooltip.Arrow />
+                        <StoreNameChips stores={item.stores} />
+                      </Tooltip.Content>
+                    </Tooltip.Portal>
+                  </Tooltip.Root>
+                </Tooltip.Provider>
+              {/if}
+              <StoreNameChips stores={item.stores[0]} />
+            {/if}
           </div>
           <div class="list-item-options">
             <button class="list-edit-item-button light-button" onclick={() => editItem(item)}
@@ -66,13 +84,11 @@
             <span class="card-item-description muted-text">&ndash; {item.description}</span>
           {/if}
         </p>
-        <div class="store-preview-list">
-          {#each item.stores as store}
-            <span class="store-preview">{store}</span>
-          {:else}
+        <StoreNameChips stores={item.stores}>
+          {#snippet fallback()}
             <p class="muted-text">No stores...</p>
-          {/each}
-        </div>
+          {/snippet}
+        </StoreNameChips>
         <div class="card-item-options">
           <button class="card-edit-item-button outline-button" onclick={() => editItem(item)}
             ><IconPencilSimpleBold />Edit Item</button
@@ -96,13 +112,30 @@
 
 <style>
   .list-item {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr auto auto;
     gap: var(--size-2);
   }
 
   .list-item-stores {
-    margin-left: auto;
+    display: flex;
+    gap: var(--size-1);
     align-items: center;
+  }
+  :global(.store-more-icon) {
+    color: var(--muted);
+    padding: var(--size-1);
+  }
+  :global(.list-item-stores-full) {
+    display: flex;
+    background-color: var(--surface-1);
+    padding: var(--size-1);
+    border: 1px solid var(--surface-3);
+    border-radius: var(--size-1);
+    box-shadow: var(--shadow-2);
+  }
+  :global([data-arrow]) {
+    color: var(--surface-3);
   }
 
   .list-item-options {
@@ -184,19 +217,6 @@
   }
   .card-item-description {
     color: var(--muted);
-  }
-
-  .store-preview-list {
-    grid-area: stores;
-    display: flex;
-    gap: var(--size-2);
-  }
-
-  .store-preview {
-    display: inline-block;
-    background-color: var(--primary);
-    padding-inline: var(--size-2);
-    border-radius: var(--size-1);
   }
 
   .card-item-options {
