@@ -2,19 +2,53 @@
   import { getAppState, type ShoppingItem } from "$lib/state.svelte";
   import { Dialog } from "bits-ui";
   import IconXBold from "phosphor-icons-svelte/IconXBold.svelte";
-  import IconPlusBold from "phosphor-icons-svelte/IconPlusBold.svelte";
+
+  type DialogMode = "add" | "edit";
 
   const { onClose }: { onClose?: (item: ShoppingItem) => void } = $props();
 
   const app = getAppState();
 
+  export function openAddDialog() {
+    mode = "add";
+    resetDialog();
+    itemDialogOpen = true;
+  }
+
+  export function openEditDialog(item: ShoppingItem) {
+    mode = "edit";
+    resetDialog();
+    initialData = item;
+    name = item.name;
+    description = item.description;
+    stores = item.stores.join(",");
+    itemDialogOpen = true;
+  }
+
+  function handleDelete(e: Event) {
+    if (mode !== "edit") return;
+    e.preventDefault();
+
+    // Confirm delete
+    confirmDeleteDialogOpen = true;
+  }
+
   function handleClose(e: Event) {
     // Confirm close
-    const formFilled = name || description || stores;
-    if (formFilled) {
-      e.preventDefault();
-      confirmCloseDialogOpen = true;
-    }
+    const formEmpty = !(name || description || stores);
+    const initialDataEqual =
+      initialData &&
+      initialData.name === name &&
+      initialData.description === description &&
+      initialData.stores.join(",") ===
+        stores
+          .split(",")
+          .map((s) => s.trim())
+          .join(",");
+    if (formEmpty || (mode === "edit" && initialDataEqual)) return;
+
+    e.preventDefault();
+    confirmCloseDialogOpen = true;
   }
 
   function handleOpenChange(open: boolean) {
@@ -30,23 +64,40 @@
       needToBuy: true,
     };
 
-    // Add the item
-    app.shoppingItems.push(newItem);
+    if (mode === "add") {
+      // Add the item
+      app.shoppingItems.push(newItem);
+    }
+
+    if (mode === "edit") {
+      const indexToReplace = app.shoppingItems.findLastIndex((i) => i.name === initialData?.name);
+      if (indexToReplace !== -1) {
+        app.shoppingItems[indexToReplace] = newItem;
+      }
+    }
 
     // Run handler (events aren't real they can't hurt me)
     onClose && onClose(newItem);
-
-    // Clear for next item
-    clearItems();
   }
 
   // When we confirm to close
   function handleConfirmClose() {
-    clearItems();
+    resetDialog();
     itemDialogOpen = false;
   }
 
-  function clearItems() {
+  // When we confirm to delete
+  function handleConfirmDelete() {
+    // No ID so I'm just matching by name. This will cause issues if you have a ton with the same name though lmao
+    const indexToRemove = app.shoppingItems.findLastIndex((i) => i.name === name);
+    if (indexToRemove !== -1) {
+      app.shoppingItems.splice(indexToRemove, 1);
+    }
+    resetDialog();
+    itemDialogOpen = false;
+  }
+
+  function resetDialog() {
     name = "";
     description = "";
     stores = "";
@@ -54,6 +105,9 @@
 
   // Main dialog state
   let itemDialogOpen = $state(false);
+  let mode: DialogMode = $state("add");
+  let initialData: ShoppingItem | undefined;
+
   let name = $state("");
   let description = $state("");
   let stores = $state("");
@@ -64,20 +118,24 @@
       .filter((s) => s)
   );
 
-  // Confirmation dialog state
+  const itemValid = $derived(name !== "");
+
+  // Regular close confirmation dialog state
   let confirmCloseDialogOpen = $state(false);
+
+  // Delete confirmation dialog state
+  let confirmDeleteDialogOpen = $state(false);
 </script>
 
 <Dialog.Root bind:open={itemDialogOpen} onOpenChange={handleOpenChange}>
-  <Dialog.Trigger class="dialog-trigger"><IconPlusBold /> New Item</Dialog.Trigger>
   <Dialog.Portal>
     <Dialog.Overlay class="dialog-overlay" />
     <Dialog.Content class="dialog-content" onInteractOutside={handleClose} onEscapeKeydown={handleClose}>
-      <Dialog.Title class="dialog-title">Add Item</Dialog.Title>
+      <Dialog.Title class="dialog-title">{mode === "add" ? "Add Item" : "Edit Item"}</Dialog.Title>
       <hr />
       <section>
         <div class="form-item">
-          <label for="name">Name</label>
+          <label for="name">Name*</label>
           <input id="name" placeholder="Carrots" bind:value={name} required />
         </div>
         <div class="form-item">
@@ -95,7 +153,12 @@
         </div>
       </section>
       <div class="dialog-actions">
-        <Dialog.Close class="dialog-save-button">Save</Dialog.Close>
+        {#if mode === "edit"}
+          <Dialog.Close class="dialog-delete-button danger-button" onkeydown={handleDelete} onclick={handleDelete}
+            >Delete</Dialog.Close
+          >
+        {/if}
+        <Dialog.Close class="dialog-save-button" disabled={!itemValid}>Save</Dialog.Close>
       </div>
       <Dialog.Close class="dialog-close-button light-button" onkeydown={handleClose} onclick={handleClose}>
         <IconXBold />
@@ -108,12 +171,34 @@
             <Dialog.Title class="dialog-title">Unsaved changes</Dialog.Title>
             <hr />
             <Dialog.Description class="dialog-description">
-              The item has not been saved. Are you sure you want to stop adding the item?
+              The item has not been saved. Are you sure you want to discard your changes?
             </Dialog.Description>
             <div class="dialog-actions">
               <Dialog.Close class="dialog-cancel-button outline-button">Cancel</Dialog.Close>
               <Dialog.Close class="dialog-confirm-button" onkeydown={handleConfirmClose} onclick={handleConfirmClose}
                 >Confirm</Dialog.Close
+              >
+            </div>
+            <Dialog.Close class="dialog-close-button light-button">
+              <IconXBold />
+              <span class="sr-only">cancel</span>
+            </Dialog.Close>
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog.Root>
+      <Dialog.Root bind:open={confirmDeleteDialogOpen}>
+        <Dialog.Portal>
+          <Dialog.Overlay class="dialog-overlay" />
+          <Dialog.Content class="dialog-content" onInteractOutside={handleClose}>
+            <Dialog.Title class="dialog-title">Deleting item</Dialog.Title>
+            <hr />
+            <Dialog.Description class="dialog-description">
+              The item will be deleted from your shopping list. This action cannot be reversed.
+            </Dialog.Description>
+            <div class="dialog-actions">
+              <Dialog.Close class="dialog-cancel-button outline-button">Cancel</Dialog.Close>
+              <Dialog.Close class="dialog-confirm-button" onkeydown={handleConfirmDelete} onclick={handleConfirmDelete}
+                >Delete item</Dialog.Close
               >
             </div>
             <Dialog.Close class="dialog-close-button light-button">
@@ -132,6 +217,7 @@
     background-color: rgb(from var(--gray-11) r g b / 0.8);
     position: fixed;
     inset: 0;
+    z-index: 50;
 
     &[data-state="open"] {
       animation: fade-in 100ms var(--ease-1);
@@ -153,6 +239,7 @@
     border-radius: var(--size-2);
     width: calc(100% - 2rem);
     max-width: 490px;
+    z-index: 50;
 
     &[data-state="open"] {
       animation: scale-up-in 100ms var(--ease-1);
@@ -199,10 +286,7 @@
     display: inline-block;
     background-color: var(--primary);
     padding-inline: var(--size-2);
-  }
-
-  :global(.dialog-trigger) {
-    gap: var(--size-1);
+    border-radius: var(--size-1);
   }
 
   hr {

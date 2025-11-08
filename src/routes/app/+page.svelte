@@ -18,6 +18,9 @@
       }, new Map<string, number>()),
     ].sort(([_a, a], [_b, b]) => b - a)
   );
+
+  // svelte-ignore non_reactive_update
+  let addItemDialog: ReturnType<typeof AddItemDialog>;
 </script>
 
 <svelte:head>
@@ -47,7 +50,8 @@
   <section class="actions">
     <h2>Actions</h2>
     <div class="action-list">
-      <AddItemDialog />
+      <button onclick={addItemDialog.openAddDialog}>Add item</button>
+      <AddItemDialog bind:this={addItemDialog} />
     </div>
   </section>
 </article>

@@ -1,8 +1,9 @@
 <script lang="ts">
-  import type { ShoppingItem } from "$lib/state.svelte";
+  import AddItemDialog from "./add-item-dialog.svelte";
   import IconPencilSimpleBold from "phosphor-icons-svelte/IconPencilSimpleBold.svelte";
   import IconCheckBold from "phosphor-icons-svelte/IconCheckBold.svelte";
   import IconTargetBold from "phosphor-icons-svelte/IconTargetBold.svelte";
+  import type { ShoppingItem } from "$lib/state.svelte";
 
   type StoreItemMode = "card" | "list";
 
@@ -10,7 +11,9 @@
 
   const itemsSorted = $derived(items.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase())));
 
-  function editItem(item: ShoppingItem) {}
+  function editItem(item: ShoppingItem) {
+    addItemDialog.openEditDialog(item);
+  }
 
   function markItemBought(item: ShoppingItem) {
     item.needToBuy = false;
@@ -19,6 +22,8 @@
   function markItemToBuy(item: ShoppingItem) {
     item.needToBuy = true;
   }
+
+  let addItemDialog: ReturnType<typeof AddItemDialog>;
 </script>
 
 {#if items.length === 0}
@@ -35,7 +40,7 @@
             {/if}
           </div>
           <div class="list-item-stores store-preview-list">
-            {#each item.stores as store}
+            {#each item.stores.slice(0, 1) as store}
               <span class="store-preview">{store}</span>
             {/each}
           </div>
@@ -64,6 +69,8 @@
         <div class="store-preview-list">
           {#each item.stores as store}
             <span class="store-preview">{store}</span>
+          {:else}
+            <p class="muted-text">No stores...</p>
           {/each}
         </div>
         <div class="card-item-options">
@@ -85,6 +92,8 @@
   </div>
 {/if}
 
+<AddItemDialog bind:this={addItemDialog} />
+
 <style>
   .list-item {
     display: flex;
@@ -93,6 +102,7 @@
 
   .list-item-stores {
     margin-left: auto;
+    align-items: center;
   }
 
   .list-item-options {
