@@ -211,6 +211,10 @@
     gap: var(--size-1);
   }
 
+  .card-mark-to-buy-item-button {
+    --button-background-color: var(--secondary);
+  }
+
   .card-edit-item-button {
     padding-inline: var(--size-3);
   }

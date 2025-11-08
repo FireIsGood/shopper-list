@@ -9,6 +9,7 @@
 
 :root {
   --primary: light-dark(var(--lime-3), var(--lime-10));
+  --secondary: light-dark(var(--teal-3), var(--teal-10));
   --danger: light-dark(var(--red-3), var(--red-10));
   --muted: var(--gray-6);
   --blue-container: light-dark(var(--blue-4), var(--blue-8));
@@ -74,7 +75,7 @@ button {
   padding-inline: var(--size-5);
   border-radius: var(--size-1);
   background-color: var(--button-background-color, var(--primary));
-  color: var(--button-color, var(--text-2));
+  color: var(--button-color, var(--text-1));
 
   &:disabled {
     opacity: 0.5;
@@ -98,6 +99,10 @@ button {
   &:active {
     background-color: rgb(from var(--surface-3) r g b / 0.8);
   }
+}
+
+.secondary-button {
+  --button-background-color: var(--danger);
 }
 
 .danger-button {
