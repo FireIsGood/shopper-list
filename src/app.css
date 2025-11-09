@@ -58,7 +58,7 @@ h2 {
 h3 {
   margin-bottom: 0.25em;
   font-size: var(--font-size-4);
-  font-weight: var(--font-weight-7);
+  font-weight: var(--font-weight-5);
 }
 
 @media (width < 480px) {
@@ -71,6 +71,7 @@ h3 {
 button {
   height: var(--size-8);
   display: flex;
+  gap: var(--size-1);
   align-items: center;
   padding-inline: var(--size-5);
   border-radius: var(--size-1);
@@ -99,6 +100,12 @@ button {
   &:active {
     background-color: rgb(from var(--surface-3) r g b / 0.8);
   }
+}
+
+.invisible-button {
+  background-color: transparent;
+  height: unset;
+  padding-inline: 0;
 }
 
 .secondary-button {
@@ -135,6 +142,10 @@ li {
   padding-inline-start: 0;
 }
 
+hr {
+  margin-block: var(--size-6);
+}
+
 /* Override the fancy focus visible thingy */
 :not(:active):focus-visible {
   outline-offset: 0;
@@ -161,4 +172,8 @@ li {
   clip-path: inset(50%);
   /* added line to stop words getting smushed together (as they go onto separate lines and some screen readers do not understand line feeds as a space */
   white-space: nowrap;
+}
+
+.tooltip-high {
+  z-index: 100;
 }

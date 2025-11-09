@@ -16,10 +16,30 @@
   }
 
   const { stores: storeOrStores, fallback, limit }: Props = $props();
+
+  const storeNameLimit = 23;
 </script>
 
 {#snippet storeSpan(store: string)}
-  <span class="store-preview" style="--hue: {convertStoreToHue(store)}">{store}</span>
+  {#if store.length > storeNameLimit}
+    <Tooltip.Provider>
+      <Tooltip.Root delayDuration={0} disableCloseOnTriggerClick={true}>
+        <Tooltip.Trigger class="store-preview-long-name invisible-button">
+          <span class="store-preview" style="--hue: {convertStoreToHue(store)}"
+            >{store.slice(0, storeNameLimit)}&hellip;</span
+          >
+        </Tooltip.Trigger>
+        <Tooltip.Portal>
+          <Tooltip.Content class="tooltip-container tooltip-high">
+            <Tooltip.Arrow />
+            <span class="store-preview-full store-preview" style="--hue: {convertStoreToHue(store)}">{store}</span>
+          </Tooltip.Content>
+        </Tooltip.Portal>
+      </Tooltip.Root>
+    </Tooltip.Provider>
+  {:else}
+    <span class="store-preview" style="--hue: {convertStoreToHue(store)}">{store}</span>
+  {/if}
 {/snippet}
 
 {#if Array.isArray(storeOrStores)}
@@ -37,7 +57,7 @@
               <IconDotsThreeCircleBold />
             </Tooltip.Trigger>
             <Tooltip.Portal>
-              <Tooltip.Content class="list-item-stores-full">
+              <Tooltip.Content class="tooltip-container tooltip-high">
                 <Tooltip.Arrow />
                 <StoreNameChips stores={storeOrStores} />
               </Tooltip.Content>
@@ -59,8 +79,8 @@
 
 <style>
   .store-preview-list {
-    grid-area: stores;
     display: flex;
+    flex-wrap: wrap;
     gap: var(--size-1);
   }
 
@@ -74,13 +94,21 @@
     transition: background-color 100ms var(--ease-1);
   }
 
+  :global(.store-preview-long-name) {
+    display: inline-flex;
+  }
+
+  .store-preview-full {
+    box-shadow: var(--shadow-2);
+  }
+
   :global(.store-more-icon) {
     height: unset;
     background-color: var(--surface-2);
     color: var(--muted);
     padding: var(--size-1);
   }
-  :global(.list-item-stores-full) {
+  :global(.tooltip-container) {
     display: flex;
     background-color: var(--surface-1);
     padding: var(--size-1);

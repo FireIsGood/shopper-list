@@ -153,6 +153,8 @@
     display: flex;
     flex-direction: column;
     gap: var(--size-2);
+
+    container: card-list / inline-size;
   }
 
   .card-item {
@@ -161,7 +163,6 @@
     display: grid;
     grid-template-columns: 1fr auto;
     grid-template-rows: 1fr auto;
-    gap: 0px 0px;
     grid-auto-flow: row;
     grid-template-areas:
       "name buttons"
@@ -177,8 +178,8 @@
     content: "";
     position: absolute;
     height: 100%;
+    width: var(--size-8);
     right: 0;
-    aspect-ratio: 3 / 4;
     clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%);
     z-index: 0;
     background-color: rgb(from var(--red-container) r g b / 0.3);
@@ -216,7 +217,6 @@
   .card-mark-to-buy-item-button,
   .card-mark-bought-item-button {
     height: unset;
-    gap: var(--size-1);
   }
 
   .card-mark-to-buy-item-button {
@@ -225,5 +225,24 @@
 
   .card-edit-item-button {
     padding-inline: var(--size-3);
+  }
+
+  @container card-list (width < 800px) {
+    .card-item {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto auto;
+      grid-auto-flow: row;
+      grid-template-areas:
+        "name"
+        "stores"
+        "buttons";
+    }
+    .card-item::after {
+      width: var(--size-10);
+    }
+    .card-item-options {
+      justify-content: space-between;
+      margin-top: var(--size-2);
+    }
   }
 </style>

@@ -14,5 +14,6 @@
 
 <AppNav activePage="to-buy"></AppNav>
 <article>
+  <h2>Items ({needToBuyItems.length})</h2>
   <StoreItemCardList items={needToBuyItems} />
 </article>

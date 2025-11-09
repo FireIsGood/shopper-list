@@ -33,7 +33,7 @@
     max-width: 1024px;
     margin-inline: auto;
     display: block flow-root;
-    background-color: rgb(from var(--surface-1) r g b / 0.7);
+    background-color: rgb(from var(--surface-1) r g b / 0.8);
     box-shadow: var(--shadow-3);
   }
 

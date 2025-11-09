@@ -1,5 +1,6 @@
 <script lang="ts">
   import { getAppState } from "$lib/state.svelte";
+  import IconPlusBold from "phosphor-icons-svelte/IconPlusBold.svelte";
   import AppNav from "./app-nav.svelte";
   import AddItemDialog from "./add-item-dialog.svelte";
   import StoreItems from "./store-items.svelte";
@@ -51,7 +52,7 @@
   <section class="actions">
     <h2>Actions</h2>
     <div class="action-list">
-      <button onclick={addItemDialog.openAddDialog}>Add item</button>
+      <button onclick={addItemDialog.openAddDialog}><IconPlusBold /> Add item</button>
       <AddItemDialog bind:this={addItemDialog} />
     </div>
   </section>
@@ -65,8 +66,19 @@
   .dashboard-groups {
     min-height: 50vh;
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 2fr minmax(var(--size-14), 1fr);
     gap: var(--size-3);
+  }
+
+  article {
+    container: dashboard / inline-size;
+  }
+
+  @container dashboard (width < 800px) {
+    .dashboard-groups {
+      grid-template-columns: 1fr;
+      min-height: unset;
+    }
   }
 
   .shopping-item-group,

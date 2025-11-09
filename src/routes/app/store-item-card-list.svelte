@@ -22,7 +22,6 @@
 <style>
   .store-item-card-list {
     position: relative;
-    min-height: 50vh;
 
     /* button offset */
     padding-bottom: calc(var(--size-3) + var(--size-8));
