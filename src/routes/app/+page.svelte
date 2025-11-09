@@ -5,6 +5,8 @@
   import AddItemDialog from "./add-item-dialog.svelte";
   import StoreItems from "./store-items.svelte";
   import StoreNameChips from "./store-name-chips.svelte";
+  import { browser } from "$app/environment";
+  import Loader from "../loader.svelte";
 
   const app = getAppState();
 
@@ -34,11 +36,17 @@
   <section class="dashboard-groups">
     <div class="shopping-item-group">
       <h2 class="group-header">To Buy</h2>
-      <StoreItems items={needToBuyItems} mode="list" />
+      {#if !browser}
+        <Loader />
+      {:else}
+        <StoreItems items={needToBuyItems} mode="list" />
+      {/if}
     </div>
     <div class="stores-group">
       <h2 class="group-header">Stores</h2>
-      {#if needToBuyStores.length === 0}
+      {#if !browser}
+        <Loader />
+      {:else if needToBuyStores.length === 0}
         <p class="muted-text">No Stores...</p>
       {:else}
         <ul>

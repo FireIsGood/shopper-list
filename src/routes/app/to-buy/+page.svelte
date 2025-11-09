@@ -2,6 +2,8 @@
   import AppNav from "./../app-nav.svelte";
   import StoreItemCardList from "../store-item-card-list.svelte";
   import { getAppState } from "$lib/state.svelte";
+  import { browser } from "$app/environment";
+  import Loader from "../../loader.svelte";
 
   const app = getAppState();
 
@@ -14,6 +16,18 @@
 
 <AppNav activePage="to-buy"></AppNav>
 <article>
-  <h2>Items ({needToBuyItems.length})</h2>
-  <StoreItemCardList items={needToBuyItems} />
+  <section>
+    <h2>Items ({browser ? needToBuyItems.length : "-"})</h2>
+    {#if !browser}
+      <Loader />
+    {:else}
+      <StoreItemCardList items={needToBuyItems} />
+    {/if}
+  </section>
 </article>
+
+<style>
+  section {
+    min-height: 50vh;
+  }
+</style>
