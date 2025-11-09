@@ -5,6 +5,7 @@
   import IconCheckBold from "phosphor-icons-svelte/IconCheckBold.svelte";
   import IconTargetBold from "phosphor-icons-svelte/IconTargetBold.svelte";
   import type { ShoppingItem } from "$lib/state.svelte";
+  import Tooltip from "../app/tooltip.svelte";
 
   type StoreItemMode = "card" | "list";
 
@@ -47,12 +48,36 @@
             {/if}
           </div>
           <div class="list-item-options">
-            <button class="list-edit-item-button light-button" onclick={() => editItem(item)}
-              ><IconPencilSimpleBold /><span class="sr-only">edit item</span></button
+            <Tooltip
+              delayDuration={500}
+              disableHoverableContent={true}
+              triggerClass="invisible-button"
+              contentClass="tooltip-container tooltip-high"
             >
-            <button class="list-mark-bought-item-button light-button" onclick={() => markItemBought(item)}
-              ><IconCheckBold /><span class="sr-only">mark as bought</span></button
+              {#snippet trigger()}
+                <button class="list-edit-item-button light-button" onclick={() => editItem(item)}>
+                  <IconPencilSimpleBold /><span class="sr-only">edit item</span>
+                </button>
+              {/snippet}
+              {#snippet children()}
+                Edit item
+              {/snippet}
+            </Tooltip>
+            <Tooltip
+              delayDuration={500}
+              disableHoverableContent={true}
+              triggerClass="invisible-button"
+              contentClass="tooltip-container tooltip-high"
             >
+              {#snippet trigger()}
+                <button class="list-mark-bought-item-button light-button" onclick={() => markItemBought(item)}
+                  ><IconCheckBold /><span class="sr-only">mark as bought</span></button
+                >
+              {/snippet}
+              {#snippet children()}
+                Mark as bought
+              {/snippet}
+            </Tooltip>
           </div>
         </div>
       </li>

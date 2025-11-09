@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import { xxHash32 } from "js-xxhash";
-  import { Tooltip } from "bits-ui";
+  import Tooltip from "./tooltip.svelte";
   import StoreNameChips from "./store-name-chips.svelte";
 
   type Props = {
@@ -16,26 +16,26 @@
 
   const { stores: storeOrStores, fallback, limit }: Props = $props();
 
-  const storeNameLimit = 23;
+  const storeNameLimit = 20;
 </script>
 
 {#snippet storeSpan(store: string)}
   {#if store.length > storeNameLimit}
-    <Tooltip.Provider>
-      <Tooltip.Root delayDuration={0} disableCloseOnTriggerClick={true}>
-        <Tooltip.Trigger class="store-preview-long-name invisible-button">
-          <span class="store-preview" style="--hue: {convertStoreToHue(store)}"
-            >{store.slice(0, storeNameLimit)}&hellip;</span
-          >
-        </Tooltip.Trigger>
-        <Tooltip.Portal>
-          <Tooltip.Content class="tooltip-container tooltip-high">
-            <Tooltip.Arrow />
-            <span class="store-preview-full store-preview" style="--hue: {convertStoreToHue(store)}">{store}</span>
-          </Tooltip.Content>
-        </Tooltip.Portal>
-      </Tooltip.Root>
-    </Tooltip.Provider>
+    <Tooltip
+      delayDuration={0}
+      disableCloseOnTriggerClick={true}
+      triggerClass="store-preview-long-name invisible-button"
+      contentClass="tooltip-container tooltip-high"
+    >
+      {#snippet trigger()}
+        <span class="store-preview" style="--hue: {convertStoreToHue(store)}"
+          >{store.slice(0, storeNameLimit)}&hellip;</span
+        >
+      {/snippet}
+      {#snippet children()}
+        <span class="store-preview-full store-preview" style="--hue: {convertStoreToHue(store)}">{store}</span>
+      {/snippet}
+    </Tooltip>
   {:else}
     <span class="store-preview" style="--hue: {convertStoreToHue(store)}">{store}</span>
   {/if}
@@ -50,19 +50,19 @@
         {@render fallback?.()}
       {/each}
       {#if storeOrStores.length > limit}
-        <Tooltip.Provider>
-          <Tooltip.Root delayDuration={0} disableCloseOnTriggerClick={true}>
-            <Tooltip.Trigger class="store-more-icon invisible-button">
-              ({storeOrStores.length})
-            </Tooltip.Trigger>
-            <Tooltip.Portal>
-              <Tooltip.Content class="tooltip-container tooltip-high">
-                <Tooltip.Arrow />
-                <StoreNameChips stores={storeOrStores} />
-              </Tooltip.Content>
-            </Tooltip.Portal>
-          </Tooltip.Root>
-        </Tooltip.Provider>
+        <Tooltip
+          delayDuration={0}
+          disableCloseOnTriggerClick={true}
+          triggerClass="store-more-icon invisible-button"
+          contentClass="tooltip-container tooltip-high"
+        >
+          {#snippet trigger()}
+            ({storeOrStores.length})
+          {/snippet}
+          {#snippet children()}
+            <StoreNameChips stores={storeOrStores} />
+          {/snippet}
+        </Tooltip>
       {/if}
     {:else}
       {#each storeOrStores as store}
