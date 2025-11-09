@@ -266,18 +266,6 @@
     margin-bottom: var(--size-3);
   }
 
-  .store-preview-list {
-    display: flex;
-    gap: var(--size-2);
-  }
-
-  .store-preview {
-    display: inline-block;
-    background-color: var(--primary);
-    padding-inline: var(--size-2);
-    border-radius: var(--size-1);
-  }
-
   hr {
     margin-block: var(--size-3);
     margin-inline: calc(-1 * var(--size-3));

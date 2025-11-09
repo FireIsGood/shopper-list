@@ -9,9 +9,24 @@
   </section>
   <section class="hero-image">absolute cinema</section>
 </article>
-<article>
-  <h2>Simple, like really simple.</h2>
-  <p>I'm not even sure how to explain how simple this app is.</p>
+<article class="why">
+  <h2>Why use Shopper list?</h2>
+  <div class="reasons">
+    <div>
+      <h3>Track items by stores</h3>
+      <p>Mark items that you buy from multiple stores.</p>
+    </div>
+    <div>
+      <h3>Filter items by store</h3>
+      <p>See what you can buy from where you are.</p>
+      <p><em><small>(Feature WIP)</small></em></p>
+    </div>
+    <div>
+      <h3>Track between devices</h3>
+      <p>Set your list from your computer and check off items as you shop.</p>
+      <p><em><small>(Feature WIP)</small></em></p>
+    </div>
+  </div>
 </article>
 
 <style>
@@ -48,5 +63,29 @@
     .hero-image {
       display: none;
     }
+  }
+
+  .why {
+    border-top: 2px solid var(--surface-4);
+    padding-top: var(--size-5);
+  }
+
+  .reasons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(var(--size-content-1), 1fr));
+    gap: var(--size-4);
+    padding: var(--size-3);
+    text-align: center;
+  }
+
+  h2 {
+    text-align: center;
+  }
+  h3 {
+    font-size: var(--font-size-3);
+    font-weight: var(--font-weight-6);
+  }
+  p {
+    color: var(--text-2);
   }
 </style>
