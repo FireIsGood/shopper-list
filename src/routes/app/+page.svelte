@@ -38,6 +38,8 @@
       <h2 class="group-header">To Buy</h2>
       {#if !browser}
         <Loader />
+      {:else if needToBuyItems.length === 0}
+        <p class="muted-text">All caught up!</p>
       {:else}
         <StoreItems items={needToBuyItems} mode="list" />
       {/if}
@@ -47,7 +49,7 @@
       {#if !browser}
         <Loader />
       {:else if needToBuyStores.length === 0}
-        <p class="muted-text">No Stores...</p>
+        <p class="muted-text">All caught up!</p>
       {:else}
         <ul>
           {#each needToBuyStores as store}

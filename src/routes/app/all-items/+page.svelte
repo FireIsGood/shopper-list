@@ -23,9 +23,3 @@
     {/if}
   </section>
 </article>
-
-<style>
-  section {
-    min-height: 50vh;
-  }
-</style>

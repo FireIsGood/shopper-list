@@ -87,6 +87,10 @@ button {
 .outline-button {
   background-color: transparent;
   border: 2px solid var(--button-background-color, var(--surface-3));
+
+  &:hover {
+    background-color: rgb(from var(--button-background-color, var(--surface-3)) r g b / 0.2);
+  }
 }
 
 .light-button {

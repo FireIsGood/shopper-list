@@ -30,9 +30,7 @@
   let addItemDialog: ReturnType<typeof AddItemDialog>;
 </script>
 
-{#if items.length === 0}
-  <p class="muted-text">No Items...</p>
-{:else if mode === "list"}
+{#if mode === "list"}
   <ul>
     {#each items as item}
       <li>
@@ -90,6 +88,8 @@
           {/if}
         </div>
       </div>
+    {:else}
+      <p class="muted-text">All caught up!</p>
     {/each}
   </div>
 {/if}

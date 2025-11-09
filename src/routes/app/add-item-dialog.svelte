@@ -3,6 +3,8 @@
   import { Dialog } from "bits-ui";
   import StoreNameChips from "./store-name-chips.svelte";
   import IconXBold from "phosphor-icons-svelte/IconXBold.svelte";
+  import IconFloppyDiskBold from "phosphor-icons-svelte/IconFloppyDiskBold.svelte";
+  import IconTrashBold from "phosphor-icons-svelte/IconTrashBold.svelte";
 
   type DialogMode = "add" | "edit";
 
@@ -136,10 +138,10 @@
       <div class="dialog-actions">
         {#if mode === "edit"}
           <Dialog.Close class="dialog-delete-button danger-button" onkeydown={handleDelete} onclick={handleDelete}
-            >Delete</Dialog.Close
+            ><IconTrashBold />Delete</Dialog.Close
           >
         {/if}
-        <Dialog.Close class="dialog-save-button" disabled={!itemValid}>Save</Dialog.Close>
+        <Dialog.Close class="dialog-save-button" disabled={!itemValid}><IconFloppyDiskBold />Save</Dialog.Close>
       </div>
       <Dialog.Close class="dialog-close-button light-button" onkeydown={handleClose} onclick={handleClose}>
         <IconXBold />
@@ -155,9 +157,11 @@
               The item has not been saved. Are you sure you want to discard your changes?
             </Dialog.Description>
             <div class="dialog-actions">
-              <Dialog.Close class="dialog-cancel-button outline-button">Cancel</Dialog.Close>
-              <Dialog.Close class="dialog-confirm-button" onkeydown={handleConfirmClose} onclick={handleConfirmClose}
-                >Confirm</Dialog.Close
+              <Dialog.Close class="dialog-cancel-button outline-button">Continue editing</Dialog.Close>
+              <Dialog.Close
+                class="dialog-confirm-button danger-button"
+                onkeydown={handleConfirmClose}
+                onclick={handleConfirmClose}><IconTrashBold />Discard changes</Dialog.Close
               >
             </div>
             <Dialog.Close class="dialog-close-button light-button">
@@ -181,7 +185,7 @@
               <Dialog.Close
                 class="dialog-confirm-button danger-button"
                 onkeydown={handleConfirmDelete}
-                onclick={handleConfirmDelete}>Delete item</Dialog.Close
+                onclick={handleConfirmDelete}><IconTrashBold />Delete item</Dialog.Close
               >
             </div>
             <Dialog.Close class="dialog-close-button light-button">
@@ -254,7 +258,8 @@
     padding: var(--size-2);
     right: var(--size-2);
     top: var(--size-2);
-    font-size: var(--size-4);
+    font-size: var(--size-6);
+    color: var(--muted);
   }
 
   .form-item {
