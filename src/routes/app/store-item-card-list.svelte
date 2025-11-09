@@ -2,6 +2,7 @@
   import type { ShoppingItem } from "$lib/state.svelte";
   import StoreItems from "./store-items.svelte";
   import AddItemDialog from "./add-item-dialog.svelte";
+  import IconPlusBold from "phosphor-icons-svelte/IconPlusBold.svelte";
 
   type Props = {
     items: ShoppingItem[];
@@ -15,7 +16,7 @@
 
 <section class="store-item-card-list">
   <StoreItems {items} mode="card" />
-  <button class="add-item-button" onclick={addItemDialog.openAddDialog}>Add item</button>
+  <button class="add-item-button" onclick={addItemDialog.openAddDialog}><IconPlusBold /> Add item</button>
   <AddItemDialog bind:this={addItemDialog} />
 </section>
 
