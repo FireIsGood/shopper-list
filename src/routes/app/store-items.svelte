@@ -8,7 +8,12 @@
 
   type StoreItemMode = "card" | "list";
 
-  const { items, mode = "card" }: { items: ShoppingItem[]; mode?: StoreItemMode } = $props();
+  type Props = {
+    items: ShoppingItem[];
+    mode?: StoreItemMode;
+  };
+
+  const { items, mode = "card" }: Props = $props();
 
   function editItem(item: ShoppingItem) {
     addItemDialog.openEditDialog(item);

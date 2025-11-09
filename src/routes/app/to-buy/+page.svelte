@@ -1,6 +1,6 @@
 <script lang="ts">
   import AppNav from "./../app-nav.svelte";
-  import StoreItems from "../store-items.svelte";
+  import StoreItemCardList from "../store-item-card-list.svelte";
   import { getAppState } from "$lib/state.svelte";
 
   const app = getAppState();
@@ -14,5 +14,5 @@
 
 <AppNav activePage="to-buy"></AppNav>
 <article>
-  <StoreItems items={needToBuyItems} mode="card" />
+  <StoreItemCardList items={needToBuyItems} />
 </article>

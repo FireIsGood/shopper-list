@@ -178,8 +178,10 @@
             </Dialog.Description>
             <div class="dialog-actions">
               <Dialog.Close class="dialog-cancel-button outline-button">Cancel</Dialog.Close>
-              <Dialog.Close class="dialog-confirm-button" onkeydown={handleConfirmDelete} onclick={handleConfirmDelete}
-                >Delete item</Dialog.Close
+              <Dialog.Close
+                class="dialog-confirm-button danger-button"
+                onkeydown={handleConfirmDelete}
+                onclick={handleConfirmDelete}>Delete item</Dialog.Close
               >
             </div>
             <Dialog.Close class="dialog-close-button light-button">
