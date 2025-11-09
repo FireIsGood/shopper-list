@@ -17,7 +17,7 @@
 <AppNav activePage="to-buy"></AppNav>
 <article>
   <section>
-    <h2>Items ({browser ? needToBuyItems.length : "-"})</h2>
+    <h2>To Buy ({browser ? needToBuyItems.length : "-"})</h2>
     {#if !browser}
       <Loader />
     {:else}

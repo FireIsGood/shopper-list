@@ -15,7 +15,7 @@
 <AppNav activePage="all-items"></AppNav>
 <article>
   <section>
-    <h2>Items ({browser ? app.getItems().length : "-"})</h2>
+    <h2>All Items ({browser ? app.getItems().length : "-"})</h2>
     {#if !browser}
       <Loader />
     {:else}

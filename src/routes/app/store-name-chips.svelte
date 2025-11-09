@@ -1,7 +1,6 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import { xxHash32 } from "js-xxhash";
-  import IconDotsThreeCircleBold from "phosphor-icons-svelte/IconDotsThreeCircleBold.svelte";
   import { Tooltip } from "bits-ui";
   import StoreNameChips from "./store-name-chips.svelte";
 
@@ -53,8 +52,8 @@
       {#if storeOrStores.length > limit}
         <Tooltip.Provider>
           <Tooltip.Root delayDuration={0} disableCloseOnTriggerClick={true}>
-            <Tooltip.Trigger class="store-more-icon">
-              <IconDotsThreeCircleBold />
+            <Tooltip.Trigger class="store-more-icon invisible-button">
+              ({storeOrStores.length})
             </Tooltip.Trigger>
             <Tooltip.Portal>
               <Tooltip.Content class="tooltip-container tooltip-high">
@@ -81,13 +80,16 @@
   .store-preview-list {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--size-1);
+    align-items: center;
+    gap: 0.5ch;
   }
 
   .store-preview {
     display: inline-block;
     padding-inline: var(--size-2);
     border-radius: var(--size-1);
+    line-height: 1;
+    padding-block: 0.25em;
 
     /* CSS crimes my beloved*/
     background-color: oklch(from var(--primary) l c var(--hue));
@@ -103,10 +105,8 @@
   }
 
   :global(.store-more-icon) {
-    height: unset;
-    background-color: var(--surface-2);
+    font-size: var(--font-size-1);
     color: var(--muted);
-    padding: var(--size-1);
   }
   :global(.tooltip-container) {
     display: flex;
