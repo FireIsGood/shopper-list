@@ -10,8 +10,6 @@
 
   const { items, mode = "card" }: { items: ShoppingItem[]; mode?: StoreItemMode } = $props();
 
-  const itemsSorted = $derived(items.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase())));
-
   function editItem(item: ShoppingItem) {
     addItemDialog.openEditDialog(item);
   }
@@ -31,7 +29,7 @@
   <p class="muted-text">No Items...</p>
 {:else if mode === "list"}
   <ul>
-    {#each itemsSorted as item}
+    {#each items as item}
       <li>
         <div class="list-item">
           <div class="list-item-text">
@@ -59,7 +57,7 @@
   </ul>
 {:else if mode === "card"}
   <div class="card-item-list">
-    {#each itemsSorted as item}
+    {#each items as item}
       <div class="card-item" class:to-buy={item.needToBuy}>
         <p class="card-item-text">
           <span class="card-item-name">{item.name}</span>

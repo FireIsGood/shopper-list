@@ -1,35 +1,90 @@
 import { browser } from "$app/environment";
 import { getContext, setContext } from "svelte";
 
-const APP_CTX = "APP_CTX";
-
-type AppData = {
-  shoppingItems: ShoppingItem[];
-};
-
 export type ShoppingItem = {
+  id: string;
   name: string;
   description: string;
   stores: string[];
   needToBuy: boolean;
 };
 
-const defaultData: AppData = {
-  shoppingItems: [],
+// Used to create a shopping item, an external interface
+type ShoppingItemInitial = {
+  name: string;
+  description: string;
+  stores: string[];
 };
 
-export function setAppState() {
-  if (!browser) return defaultData;
+// JSON type saved
+type StoredState = {
+  shoppingItems: ShoppingItem[];
+};
 
-  const localStorageState = localStorage?.getItem("appState") ?? null;
-  const initialData: AppData = localStorageState
-    ? Object.assign(defaultData, JSON.parse(localStorageState))
-    : defaultData;
-  const appState = $state(initialData);
-  setContext(APP_CTX, appState);
-  return appState;
+class AppState {
+  private shoppingItems = $state<ShoppingItem[]>([]);
+
+  constructor() {
+    if (!browser) return;
+    const localStorageState = localStorage?.getItem("appState") ?? null;
+
+    if (localStorageState) {
+      const initialData: StoredState = JSON.parse(localStorageState);
+      this.shoppingItems = initialData.shoppingItems ?? [];
+    }
+
+    $effect(() => {
+      this.saveToLocalStorage();
+    });
+  }
+
+  public addItem(item: ShoppingItemInitial) {
+    const newItem = this.createItem(item);
+    this.shoppingItems.push(newItem);
+  }
+
+  public editItem(id: string, item: ShoppingItemInitial) {
+    const itemIndex = this.shoppingItems.findIndex((i) => i.id === id);
+    if (itemIndex === -1) return;
+
+    const newItem = this.createItem(item);
+    this.shoppingItems[itemIndex] = newItem;
+  }
+
+  public deleteItem(id: string) {
+    this.shoppingItems = this.shoppingItems.filter((i) => i.id !== id);
+  }
+
+  public getItems(): ShoppingItem[] {
+    return this.shoppingItems.toSorted((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
+  }
+
+  private createItem(initialItem: ShoppingItemInitial): ShoppingItem {
+    return {
+      id: crypto.randomUUID(),
+      name: initialItem.name,
+      description: initialItem.description,
+      stores: initialItem.stores.map((s) => s.trim()),
+      needToBuy: true,
+    };
+  }
+
+  private saveToLocalStorage() {
+    const flatData: StoredState = { shoppingItems: this.shoppingItems };
+    localStorage.setItem("appState", JSON.stringify(flatData));
+  }
 }
 
-export function getAppState(): AppData {
-  return getContext<AppData>(APP_CTX) ?? defaultData;
+export function shoppingItemsEqual(a: ShoppingItemInitial, b: ShoppingItemInitial): boolean {
+  return a.name === b.name && a.description === b.description && a.stores.join(",") === b.stores.join(",");
+}
+
+const APP_CTX = Symbol("APP_CTX");
+
+export function setAppState() {
+  return setContext(APP_CTX, new AppState());
+}
+
+export function getAppState() {
+  return getContext<ReturnType<typeof setAppState>>(APP_CTX);
 }

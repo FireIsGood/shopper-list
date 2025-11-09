@@ -7,7 +7,7 @@
 
   const app = getAppState();
 
-  const needToBuyItems = $derived(app.shoppingItems.filter((i) => i.needToBuy));
+  const needToBuyItems = $derived(app.getItems().filter((i) => i.needToBuy));
   const needToBuyStores = $derived(
     [
       ...needToBuyItems.reduce((map, item) => {

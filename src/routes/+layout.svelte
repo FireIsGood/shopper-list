@@ -4,11 +4,8 @@
   import { page } from "$app/state";
   import { setAppState } from "$lib/state.svelte";
 
-  const app = setAppState();
-
-  $effect(() => {
-    localStorage.setItem("appState", JSON.stringify(app));
-  });
+  // Set up services
+  setAppState();
 
   let { children } = $props();
 </script>

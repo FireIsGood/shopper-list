@@ -1,12 +1,10 @@
 <script lang="ts">
-  import { getAppState, type ShoppingItem } from "$lib/state.svelte";
+  import { getAppState, shoppingItemsEqual, type ShoppingItem } from "$lib/state.svelte";
   import { Dialog } from "bits-ui";
   import StoreNameChips from "./store-name-chips.svelte";
   import IconXBold from "phosphor-icons-svelte/IconXBold.svelte";
 
   type DialogMode = "add" | "edit";
-
-  const { onClose }: { onClose?: (item: ShoppingItem) => void } = $props();
 
   const app = getAppState();
 
@@ -37,15 +35,7 @@
   function handleClose(e: Event) {
     // Confirm close
     const formEmpty = !(name || description || stores);
-    const initialDataEqual =
-      initialData &&
-      initialData.name === name &&
-      initialData.description === description &&
-      initialData.stores.join(",") ===
-        stores
-          .split(",")
-          .map((s) => s.trim())
-          .join(",");
+    const initialDataEqual = initialData && shoppingItemsEqual(initialData, { name, description, stores: storesList });
     if (formEmpty || (mode === "edit" && initialDataEqual)) return;
 
     e.preventDefault();
@@ -58,27 +48,22 @@
     // Manually confirm form entries lol
     if (name === "") return;
 
-    const newItem: ShoppingItem = {
-      name,
-      description,
-      stores: storesList,
-      needToBuy: true,
-    };
-
     if (mode === "add") {
-      // Add the item
-      app.shoppingItems.push(newItem);
+      app.addItem({
+        name,
+        description,
+        stores: storesList,
+      });
     }
 
     if (mode === "edit") {
-      const indexToReplace = app.shoppingItems.findLastIndex((i) => i.name === initialData?.name);
-      if (indexToReplace !== -1) {
-        app.shoppingItems[indexToReplace] = newItem;
-      }
+      if (!initialData) return;
+      app.editItem(initialData.id, {
+        name,
+        description,
+        stores: storesList,
+      });
     }
-
-    // Run handler (events aren't real they can't hurt me)
-    onClose && onClose(newItem);
   }
 
   // When we confirm to close
@@ -89,11 +74,8 @@
 
   // When we confirm to delete
   function handleConfirmDelete() {
-    // No ID so I'm just matching by name. This will cause issues if you have a ton with the same name though lmao
-    const indexToRemove = app.shoppingItems.findLastIndex((i) => i.name === name);
-    if (indexToRemove !== -1) {
-      app.shoppingItems.splice(indexToRemove, 1);
-    }
+    if (!initialData) return;
+    app.deleteItem(initialData.id);
     resetDialog();
     itemDialogOpen = false;
   }
@@ -262,6 +244,7 @@
     display: flex;
     justify-content: end;
     gap: var(--size-3);
+    margin-top: var(--size-6);
   }
 
   :global(.dialog-close-button) {

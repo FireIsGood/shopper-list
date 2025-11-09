@@ -6,7 +6,7 @@
   const app = getAppState();
 
   // Fucked Up and Evil hack
-  const allItems = $derived(app.shoppingItems.map((i) => i));
+  const allItems = $derived(app.getItems().map((i) => i));
 </script>
 
 <svelte:head>
